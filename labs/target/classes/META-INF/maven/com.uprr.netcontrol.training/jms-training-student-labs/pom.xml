@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0          
+        http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <prerequisites>
+    <maven>2.0.9</maven>
+  </prerequisites>
+
+  <parent>
+    <groupId>com.uprr.netcontrol.maven</groupId>
+    <artifactId>netcontrol-master-pom</artifactId>
+    <version>8</version>
+  </parent>
+
+  <groupId>com.uprr.netcontrol.training</groupId>
+  <artifactId>jms-training-student-labs</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <packaging>jar</packaging>
+
+  <name>[COHERENCE] :: ${project.artifactId}-${project.version}</name>
+  <description><![CDATA[
+    Shared Utility project. NOTE: All dependencies will be optional, users 
+    MUST explicitly provide the dependencies that are needed by the component
+    please read the javadoc or source.
+  ]]></description>
+
+  <properties>
+    <project-tla>nca</project-tla>
+
+
+    <!-- NOTE: TestNG groups: enabling medium speed tests during checkin. -->
+    <uprr-implementation-environment>local</uprr-implementation-environment>
+    <skipTests>false</skipTests>
+    <enabled.testng.groups>unit.*,fast.*,medium.*</enabled.testng.groups>
+    <disabled.testng.groups>broken.*, deprecated.*</disabled.testng.groups>
+
+    <!-- | All plugin versions... -->
+    <maven-jar-plugin-version>2.3.1</maven-jar-plugin-version>
+    <maven-surefire-plugin-version>2.4.3</maven-surefire-plugin-version>
+
+    <spring-version>4.3.17.RELEASE</spring-version>
+  </properties>
+
+
+  <dependencies>
+    <!-- ALL COMPILE DEPENDENCIES -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${spring-version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jms</artifactId>
+      <version>${spring-version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.jms</groupId>
+      <artifactId>jms</artifactId>
+      <version>2.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.tibco.ems</groupId>
+      <artifactId>tibjms</artifactId>
+      <version>8.2.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.tibco.ems</groupId>
+      <artifactId>tibjmsadmin</artifactId>
+      <version>8.2.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <!-- ALL RUNTIME DEPENDENCIES -->
+    <!-- ALL TEST SCOPED Dependencies -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.6</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.mockrunner</groupId>
+      <artifactId>mockrunner-jdk1.5-j2ee1.3</artifactId>
+      <version>0.4</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>cglib-nodep</groupId>
+          <artifactId>cglib-nodep</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>jboss</groupId>
+          <artifactId>jboss-jee</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.mockejb</groupId>
+          <artifactId>mockejb</artifactId>
+        </exclusion>
+        <exclusion>
+          <artifactId>xml-apis</artifactId>
+          <groupId>xml-apis</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>servlet-api</artifactId>
+          <groupId>javax.servlet</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <defaultGoal>package</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin-version}</version><!--$NO-MVN-MAN-VER$ -->
+        <configuration>
+          <systemProperties>
+            <property>
+              <name>uprr.implementation.environment</name>
+              <value>${uprr-implementation-environment}</value>
+            </property>
+          </systemProperties>
+          <includes>
+            <include>**/*Test.java</include>
+            <include>**/*Tests.java</include>
+          </includes>
+          <skipTests>${skipTests}</skipTests>
+          <testFailureIgnore>false</testFailureIgnore>
+          <forkMode>once</forkMode>
+          <useSystemClassLoader>true</useSystemClassLoader>
+          <groups>${enabled.testng.groups}</groups>
+          <excludedGroups>${disabled.testng.groups}</excludedGroups>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+  </profiles>
+
+</project>

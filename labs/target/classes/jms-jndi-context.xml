@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<!-- ************************************************************************************************** -->
+	<!-- JNDI Configuration -->
+	<!-- ************************************************************************************************** -->
+	<bean id="jndiConfiguration" abstract="true">
+		<property name="jndiEnvironment">
+			<props>
+				<prop key="java.naming.factory.initial">com.tibco.tibjms.naming.TibjmsInitialContextFactory
+				</prop>
+				<prop key="java.naming.provider.url">tcp://omhq169a:7222,tcp://omhq169a:7224</prop>
+				<prop key="java.naming.security.principal">training</prop>
+				<prop key="java.naming.security.credentials">parkfair</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="connectionFactoryForRequest" class="org.springframework.jndi.JndiObjectFactoryBean"
+		parent="jndiConfiguration">
+		<property name="jndiName" value="XMF-CF-00" />
+	</bean>
+
+	<bean id="authenticatingConnectionFactoryForRequest"
+		class="org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter">
+		<property name="targetConnectionFactory" ref="connectionFactoryForRequest" />
+		<property name="username" value="training" />
+		<property name="password" value="parkfair" />
+	</bean>
+
+	<bean id="singleJMSConnectionFactoryForRequest"
+		class="org.springframework.jms.connection.SingleConnectionFactory">
+		<property name="targetConnectionFactory" ref="authenticatingConnectionFactoryForRequest" />
+		<property name="reconnectOnException" value="true" />
+	</bean>
+
+</beans>
